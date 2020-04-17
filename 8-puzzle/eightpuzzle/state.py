@@ -6,6 +6,10 @@ from eightpuzzle.action import Action
 
 
 class State:
+    """
+    Represents a state of the 8-puzzle - a particular configuration of
+    the tiles.
+    """
     __DIMENSION = 3
 
     __BLANK_TILE = " "
