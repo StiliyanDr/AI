@@ -53,6 +53,22 @@ def index_of(value, list, columns_count):
     return None
 
 
+def number_of_differing_values_in(lhs, rhs):
+    """
+    Takes two 2D lists which are assumed to have the same shape and
+    returns the number of differing corresponding values in the lists.
+    """
+    corresponding_values = zip(values_of(lhs),
+                               values_of(rhs))
+    ones_for_differing_values = (
+        1
+        for a, b in corresponding_values
+        if (a != b)
+    )
+
+    return sum(ones_for_differing_values)
+
+
 def swap_values_at(first_position, second_position, list):
     """
     Swaps two values in-place in a list of lists.
