@@ -26,7 +26,7 @@ def define_priority_queue_class(key_accessor=utility.identity,
     :param comparator: A function taking two keys and returning a
     boolean value - whether the first key is considered less than the
     second one. This function is assumed to raise no exceptions.
-    Defaults to the < operator on items.
+    Defaults to the < operator.
     """
     class PriorityQueue:
         """
