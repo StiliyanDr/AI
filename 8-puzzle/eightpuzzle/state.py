@@ -121,7 +121,7 @@ class State:
     def __tiles_with_blank_moved_to(self, position):
         assert self.__class__.__is_valid_position(position)
 
-        new_tiles = deep_copy_of(self.__tiles)
+        new_tiles = self.tiles
         utility.swap_values_at(
             position,
             self.__position_of_blank_tile,
@@ -129,6 +129,26 @@ class State:
         )
 
         return new_tiles
+
+    @property
+    def tiles(self):
+        """
+        :returns: Returns a two-dimensional list (a list of lists) that
+        represents the tiles.
+        """
+        return deep_copy_of(self.__tiles)
+
+    def __eq__(self, rhs):
+        """
+        :param rhs: A value.
+        :returns: Returns a boolean value indicating whether rhs is a State
+        instance representing the same arrangement of the tiles.
+        """
+        return (isinstance(rhs, self.__class__) and
+                self.__tiles == rhs.__tiles)
+
+    def __hash__(self):
+        return hash(str(self))
 
     def __str__(self):
         d = self.__class__.__TILES_DELIMITER
