@@ -27,30 +27,21 @@ class State:
         """
         Creates an instance from the contents of a CSV file.
 
+        This file must contain a table whose shape is DIMENSION^2 and whose
+        values are TARGET_VALUES, in unspecified order.
+
         :param path: A string - the path of the CSV file.
 
         :raises FileNotFoundError: Raises an exception if the file does not
         exist.
-        :raises ValueError: Raises an exception if the file's contents are
-        not in the required format (see the constructor).
-        """
-        with open(path) as file:
-            return cls(list(csv.reader(file)))
-
-    def __init__(self, tiles):
-        """
-        :param tiles: A list of lists of strings whose shape is DIMENSION^2
-        and whose values are TARGET_VALUES, in unspecified order.
-
-        :raises ValueError: Raises an exception if tiles is not in the
+        :raises ValueError: Raises an exception if the file is not in the
         required format.
         """
-        self.__set_tiles(tiles)
-        self.__set_position_of_blank_tile()
+        with open(path) as file:
+            tiles = list(csv.reader(file))
+            cls.__validate(tiles)
 
-    def __set_tiles(self, tiles):
-        self.__class__.__validate(tiles)
-        self.__tiles = tiles
+            return cls(tiles)
 
     @classmethod
     def __validate(cls, tiles):
@@ -76,6 +67,20 @@ class State:
             raise ValueError(
                 f"Tiles' values must be {target_values}!"
             )
+
+    def __init__(self, tiles):
+        """
+        Non-public constructor.
+
+        :param tiles: A list of lists of strings whose shape is DIMENSION^2
+        and whose values are TARGET_VALUES, in unspecified order. The argument
+        is assumed to be valid.
+        """
+        self.__set_tiles(tiles)
+        self.__set_position_of_blank_tile()
+
+    def __set_tiles(self, tiles):
+        self.__tiles = tiles
 
     def __set_position_of_blank_tile(self):
         self.__position_of_blank_tile = utility.index_of(
