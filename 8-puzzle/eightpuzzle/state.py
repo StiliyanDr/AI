@@ -50,7 +50,7 @@ class State:
 
     def __set_tiles(self, tiles):
         self.__class__.__validate(tiles)
-        self.__tiles = deep_copy_of(tiles)
+        self.__tiles = tiles
 
     @classmethod
     def __validate(cls, tiles):
