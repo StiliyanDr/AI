@@ -1,9 +1,4 @@
-from eightpuzzle import priorityqueue
-
-
-_PriorityQueue = priorityqueue.define_priority_queue_class(
-    key_accessor=lambda node: node.estimate
-)
+from pqdict import minpq as MinPriorityQueue
 
 
 class Frontier:
@@ -14,22 +9,23 @@ class Frontier:
         """
         Initialises the frontier with a single node.
         """
-        self.__nodes = _PriorityQueue([initial_node])
+        self.__nodes = MinPriorityQueue({initial_node : initial_node.estimate})
 
     def extract_node_with_lowest_estimate(self):
         """
         Extracts a node with with a lowest estimate from the frontier.
         """
         assert not self.is_empty
+        node, _ = self.__nodes.popitem()
 
-        return self.__nodes.extract_minimal()
+        return node
 
     @property
     def is_empty(self):
         """
         Returns a boolean value indicating whether the frontier is empty.
         """
-        return self.__nodes.is_empty
+        return len(self.__nodes) == 0
 
     def add_or_update_if_estimate_is_less(self, node):
         """
@@ -37,10 +33,12 @@ class Frontier:
         with the same corresponding state in the frontier. Otherwise replaces
         the node already in the frontier only if its estimate is greater.
         """
+        estimate = node.estimate
+
         if (node not in self):
-            self.__nodes.add(node)
-        else:
-            self.__nodes.update_if_key_is_less(node)
+            self.__nodes.additem(node, estimate)
+        elif (estimate < self.__nodes[node]):
+            self.__nodes.updateitem(node, estimate)
 
     def __contains__(self, node):
         """
