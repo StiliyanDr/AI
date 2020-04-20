@@ -1,5 +1,5 @@
 from copy import deepcopy as deep_copy_of
-import csv
+import csv, random
 
 from eightpuzzle import utility
 from eightpuzzle.action import Action
@@ -23,6 +23,17 @@ class State:
     __TILES_DELIMITER = "|"
 
     @classmethod
+    def random(cls):
+        """
+        Creates an instance representing a random ordering of the tiles.
+        """
+        tiles = cls.__TARGET_VALUES
+        flat_tiles = random.sample(tiles, len(tiles))
+
+        return  cls(utility.to_table(flat_tiles,
+                                     row_size=cls.__DIMENSION))
+
+    @classmethod
     def from_CSV(cls, path):
         """
         Creates an instance from the contents of a CSV file.
@@ -39,9 +50,23 @@ class State:
         """
         with open(path) as file:
             tiles = list(csv.reader(file))
-            cls.__validate(tiles)
 
-            return cls(tiles)
+            return cls.from_list(tiles)
+
+    @classmethod
+    def from_list(cls, tiles):
+        """
+        Creates an instance from a 2D list of strings.
+
+        :param tiles: A list of lists of strings whose shape is DIMENSION^2
+        and whose values are TARGET_VALUES, in unspecified order.
+
+        :raises ValueError: Raises an exception if the list is not in the
+        required format.
+        """
+        cls.__validate(tiles)
+
+        return cls(tiles)
 
     @classmethod
     def __validate(cls, tiles):

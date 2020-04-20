@@ -83,3 +83,34 @@ def swap_values_at(first_position, second_position, list):
     k, l = second_position
 
     list[i][j], list[k][l] = list[k][l], list[i][j]
+
+
+def to_table(list, row_size=2):
+    """
+    Cuts a list into lists to form a table.
+
+    :param list: A list.
+    :param row_size: The row size of the resulting table.
+    :returns: Cuts the list into lists with size row_size and forms a 2D
+    list. If the row size does not divide the original list's length, the
+    last row is shorter than the rest.
+    """
+    length = len(list)
+    length_of_last_row = (row_size
+                          if (divides(row_size, length))
+                          else length % row_size)
+    start_of_last_row = length - length_of_last_row
+
+    return [
+        list[start : start + row_size]
+        for start in range(0, start_of_last_row + 1, row_size)
+    ]
+
+
+def divides(a, b):
+    """
+    :param a: A nonzero integer.
+    :param b: An integer.
+    :returns: Returns a boolean value indicating whether a divides b.
+    """
+    return b % a == 0
